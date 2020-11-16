@@ -187,8 +187,11 @@ class SinglyLinkedList {
     //     current = current.next;
     // }
     // the while loop misses the last element
-
     return arr;
+  }
+
+  peek(){
+    return this.get(this.length - 1);
   }
 }
 

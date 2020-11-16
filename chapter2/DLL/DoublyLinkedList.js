@@ -188,6 +188,9 @@ class DoublyLinkedList{
         console.log(result);
         return result;
     }
+    peek(){
+        return this.get(this.length - 1);
+      }
 }
 
 module.exports = DoublyLinkedList;
