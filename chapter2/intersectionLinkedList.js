@@ -23,6 +23,7 @@ function intersectionLinkedList(dll1,dll2){
     //if the last element of each stack doesn't match, meaning they didn't intersect at all
     if(dll1.peek().val !== dll2.peek().val) return false;
     let peek1 = dll1.peek();
+    //sadas
     console.log(peek1);
     // let peekValue1 = peek1.val;
     // console.log(peekValue1);
