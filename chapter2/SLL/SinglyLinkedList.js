@@ -188,7 +188,6 @@ class SinglyLinkedList {
     // }
     // the while loop misses the last element
 
-    console.log(arr);
     return arr;
   }
 }
