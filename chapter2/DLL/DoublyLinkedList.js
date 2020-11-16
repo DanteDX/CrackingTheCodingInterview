@@ -83,6 +83,7 @@ class DoublyLinkedList {
     if (index < 0 || index >= this.length) return null;
     let count, current;
 
+    // a little optimization
     if (index <= this.length / 2) {
       count = 0;
       current = current.next;
@@ -184,13 +185,12 @@ class DoublyLinkedList {
       result.push(current.val);
       current = current.next;
     }
-    console.log(result);
     return result;
   }
   peek() {
     //O(1) now, where it was O(n) for SLL
     let poppedElement = this.pop();
-    this.push(poppedElement);
+    this.push(poppedElement.val);
     return poppedElement;
   }
 }

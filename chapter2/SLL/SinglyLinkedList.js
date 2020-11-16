@@ -193,7 +193,7 @@ class SinglyLinkedList {
   peek(){
     //O(n) still, should be better at DLL
     let poppedElement = this.pop();
-    this.push(poppedElement);
+    this.push(poppedElement.val);
     return poppedElement;
   }
 }
