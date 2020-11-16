@@ -15,19 +15,14 @@ function intersectionLinkedList(dll1,dll2){
     // we put each node in each stack
     let dll1Nodes = dll1.print();
     let dll2Nodes = dll2.print();
-    console.log(dll1Nodes,dll2Nodes);
+    console.log('First Linked list was',dll1Nodes);
+    console.log('Second Linked List was', dll2Nodes);
 
     // we look for edge cases, stack size zero or not
     if(dll1Nodes.length === 0 || dll2Nodes.length === 0) return undefined; 
 
     //if the last element of each stack doesn't match, meaning they didn't intersect at all
     if(dll1.peek().val !== dll2.peek().val) return false;
-    let peek1 = dll1.peek();
-    //sadas
-    console.log(peek1);
-    // let peekValue1 = peek1.val;
-    // console.log(peekValue1);
-
     // we pop each stack until we find a mismatched element at the end of each stack
     let intersectElement;
     while(dll1.peek().val === dll2.peek().val){
@@ -37,5 +32,7 @@ function intersectionLinkedList(dll1,dll2){
     }
     return intersectElement;
 }
+
+
 
 console.log(intersectionLinkedList(DLL1,DLL2));
