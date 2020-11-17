@@ -17,6 +17,7 @@ class Queue extends DoublyLinkedList{
         return true;
     }
     dequeue(){
+        if(this.length === 0) return undefined;
         return this.pop().val;
     }
     isEmpty(){
