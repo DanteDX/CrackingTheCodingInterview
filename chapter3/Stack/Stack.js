@@ -17,6 +17,9 @@ class Stack{
         this.length--;
         return this.data.pop();
     }
+    sPeek(){
+        return this.data[this.length - 1];
+    }
     isEmpty(){
         if(this.data.length === 0){
             return true;

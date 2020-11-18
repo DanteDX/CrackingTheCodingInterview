@@ -27,6 +27,9 @@ class Queue extends DoublyLinkedList{
             return false;
         }
     }
+    qPeek(){
+        return this.peek().val;
+    }
     // just for easy work
     checkData(){
         return this.print();
