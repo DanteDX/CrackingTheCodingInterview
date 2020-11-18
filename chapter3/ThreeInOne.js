@@ -1,4 +1,5 @@
 // describe how you can use a single array to implement three stacks or 'k' stacks in general
+// the name of this file is still ThreeInOne.js to keep track of the question of CCI
 
 class NStack {
   constructor() {
