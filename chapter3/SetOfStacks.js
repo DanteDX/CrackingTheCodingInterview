@@ -5,6 +5,9 @@ composed of several stacks and should create a new stack once the previous one e
 SetOfStacks. push() and SetOfStacks. pop() should behave identically to a single stack
 (that is, pop () should return the same values as it would if there were just a single stack) */
 
+// if we implement stack with DoublyLinkedList, stack.shift() will O(1), so popAt(stackIndex) will be O(n)
+// but the way we implemented it here, popAt(stackIndex) will O(n2)
+
 const Stack = require("./Stack/Stack");
 
 class SetOfStacks {
