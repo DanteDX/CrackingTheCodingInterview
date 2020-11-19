@@ -6,14 +6,14 @@ If we implement queue by doublylinkedlist, we will have these complexities easil
 DLL's unshift(value) and pop() both has O(1)
 we call unshift(value) here enqueue(value) and pop() will be named dequeue() */
 
-const DoublyLinkedList = require("../../chapter2/DLL/DoublyLinkedList");
+const DoublyLinkedList = require("../../chapter2LinkedList/DLL/DoublyLinkedList");
 // checkout the DoublyLinkedList class to properly understand the methods
 class Queue extends DoublyLinkedList{
     constructor(){
         super();
     }
     enqueue(val){
-        this.push(val);
+        this.unshift(val);
         return true;
     }
     dequeue(){

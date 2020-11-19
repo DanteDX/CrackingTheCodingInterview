@@ -65,7 +65,7 @@ class DoublyLinkedList {
 
   //O(1)
   unshift(val) {
-    let newHead = new DoublyLinkedListNode(val);
+    let newNode = new DoublyLinkedListNode(val);
     if (this.length === 0) {
       this.head = newNode;
       this.tail = newNode;
