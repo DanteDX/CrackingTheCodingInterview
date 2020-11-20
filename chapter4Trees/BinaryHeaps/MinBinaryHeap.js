@@ -1,3 +1,9 @@
+/* insertion O(log n)
+   removal O(log n)
+   search O(n)
+*/
+
+
 class MinBinaryHeap{
     constructor(){
         this.values = [];

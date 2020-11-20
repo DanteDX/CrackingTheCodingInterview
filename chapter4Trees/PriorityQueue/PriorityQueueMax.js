@@ -1,10 +1,10 @@
-/* insertion O(log n)
-   removal O(log n)
+/* enqueue O(log n)
+   dequeue O(log n)
    search O(n)
 */
 
 
-class MaxBinaryHeap{
+class PriorityQueueMax{
     constructor(){
         this.values = [];
     }
@@ -15,7 +15,7 @@ class MaxBinaryHeap{
             let parentIndex = Math.floor((elementIndex - 1)/2);
             let parentElement = this.values[parentIndex];
             
-            if(parentElement >= element) break;
+            if(parentElement.priority >= element.priority) break;
 
             this.values[parentIndex] = element;
             this.values[elementIndex] = parentElement;
@@ -23,8 +23,9 @@ class MaxBinaryHeap{
 
         }
     }
-    insert(val){
-        this.values.push(val);
+    enqueue(val,priority){
+        if(priority === undefined || val === undefined) return false;
+        this.values.push({val,priority});
         this.bubbleUp();
         return true;
     }
@@ -46,7 +47,7 @@ class MaxBinaryHeap{
 
             if(leftChildIndex < length ){
                 leftChild = this.values[leftChildIndex];
-                if(leftChild > element){
+                if(leftChild.priority > element.priority){
                     swap = leftChildIndex;
                 }
             }
@@ -54,8 +55,8 @@ class MaxBinaryHeap{
             if(rightChildIndex < length ){
                 rightChild = this.values[rightChildIndex];
                 if(
-                    ((swap !== null) && (rightChild > leftChild)) ||
-                    ((swap === null) && rightChild > element)
+                    ((swap !== null) && (rightChild.priority > leftChild.priority)) ||
+                    ((swap === null) && rightChild.priority > element.priority)
                 ){
                     swap = rightChildIndex;
                 }
@@ -69,7 +70,7 @@ class MaxBinaryHeap{
         }
     }
 
-    extractMax(){
+    dequeueMax(){
         let max = this.values[0];
         let end = this.values.pop();
         if(this.values.length > 0){
@@ -82,4 +83,4 @@ class MaxBinaryHeap{
 
 
 
-module.exports = MaxBinaryHeap;
+module.exports = PriorityQueueMax;

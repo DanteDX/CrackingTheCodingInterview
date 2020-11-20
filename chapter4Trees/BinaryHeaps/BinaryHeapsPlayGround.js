@@ -20,6 +20,8 @@ minHeap.insert(2);
 minHeap.insert(3);
 minHeap.insert(0);
 minHeap.insert(11);
-console.log(minHeap.values); 
-console.log("Min value is ",minHeap.extractMin()); 
-console.log(minHeap.values); 
+console.log(minHeap.values); //[0,1,3,2,11]
+console.log("Min value is ",minHeap.extractMin()); //0
+console.log(minHeap.values); //[1,2,3,11]
+
+console.log("############################################################");
