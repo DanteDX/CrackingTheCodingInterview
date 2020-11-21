@@ -30,9 +30,9 @@ class PriorityQueueMin{
         return true;
     }
 
-    /* we first extract the max from maxheap
+    /* we first extract the max from minheap
     and then fill the empty node with last added element,
-    which will be already down in extract max
+    which will be already down in extract min
     function */
     sinkDown(){
         let index = 0
