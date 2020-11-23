@@ -26,3 +26,9 @@ g.addEdge('D','E');
 g.addEdge('E','F');
 
 console.log(g.adjacencyList);
+console.log("############################################");
+console.log("DFS Iterative Result is: ",g.depthFirstIterative('A'));
+console.log("############################################");
+console.log("DFS Recursive result is: ",g.depthFirstRecursive('A'));
+console.log('#############################################');
+console.log("BFS result is:", g.breadthFirst('A'));
