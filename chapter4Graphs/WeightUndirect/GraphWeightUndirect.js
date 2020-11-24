@@ -4,10 +4,10 @@ if adjacency matrix was used, complexities were different */
 // when to use DFS and when to use BFS
 //https://stackoverflow.com/questions/3332947/when-is-it-practical-to-use-depth-first-search-dfs-vs-breadth-first-search-bf#:~:text=BFS%20can%20be%20used%20to,nodes%20in%20an%20acyclic%20graph.
 
-// This is a undirected unweighted graph
+// This is a undirected weighted graph
 const Queue = require("../../chapter3StackQueue/Queue/Queue");
 
-class Graph {
+class GraphWeightUndirect {
   constructor() {
     this.adjacencyList = {};
   }
@@ -21,16 +21,16 @@ class Graph {
     }
   }
   //adding edge,O(1)
-  addEdge(v1, v2) {
+  addEdge(v1, v2,weight) {
     if (this.adjacencyList[v1] && this.adjacencyList[v2]) {
       if (
-        this.adjacencyList[v1].includes(v2) &&
-        this.adjacencyList[v2].includes(v1)
+        this.adjacencyList[v1].includes({node:v2,weight}) &&
+        this.adjacencyList[v2].includes({node:v1,weight})
       ) {
         return true;
       } else {
-        this.adjacencyList[v1].push(v2);
-        this.adjacencyList[v2].push(v1);
+        this.adjacencyList[v1].push({node:v2,weight});
+        this.adjacencyList[v2].push({node:v1,weight});
         return true;
       }
     } else {
@@ -39,17 +39,12 @@ class Graph {
   }
   //removing edge,O(E)
   removeEdge(v1, v2) {
-    if (!this.adjacencyList[v1] || !this.adjacencyList[v2]) {
-      return undefined;
-    } else if (
-      this.adjacencyList[v1].includes(v2) &&
-      this.adjacencyList[v2].includes(v1)
-    ) {
-      this.adjacencyList[v1] = this.adjacencyList[v1].filter((v) => v !== v2);
-      this.adjacencyList[v2] = this.adjacencyList[v2].filter((v) => v !== v1);
-      return true;
-    } else {
-      return false;
+    if(!this.adjacencyList[v1] || !this.adjacencyList[v2]){
+        return undefined;
+    }else{
+        this.adjacencyList[v1] = this.adjacencyList[v1].filter(v => v.node !== v2);
+        this.adjacencyList[v2] = this.adjacencyList[v2].filter(v => v.node !== v1);
+        return true;
     }
   }
   //removing vertex, O(V + E)
@@ -59,7 +54,7 @@ class Graph {
     }
     while (this.adjacencyList[vertex].length !== 0) {
       let adjacentVertex = this.adjacencyList[vertex].pop();
-      this.removeEdge(vertex, adjacentVertex);
+      this.removeEdge(vertex, adjacentVertex.node);
     }
     delete this.adjacencyList[vertex];
     return true;
@@ -74,8 +69,8 @@ class Graph {
       visited[vertex] = true;
       result.push(vertex);
       adjacencyList[vertex].forEach((n) => {
-        if (!visited[n]) {
-          dfs(n);
+        if (!visited[n.node]) {
+          dfs(n.node);
         }
       });
     }
@@ -93,9 +88,9 @@ class Graph {
       let current = stack.pop();
       result.push(current);
       this.adjacencyList[current].forEach((n) => {
-        if (!visited[n]) {
-          visited[n] = true;
-          stack.push(n);
+        if (!visited[n.node]) {
+          visited[n.node] = true;
+          stack.push(n.node);
         }
       });
     }
@@ -113,9 +108,9 @@ class Graph {
       let current =q.dequeue();
       result.push(current);
       this.adjacencyList[current].forEach(n =>{
-        if(!visited[n]){
-          visited[n] = true;
-          q.enqueue(n);
+        if(!visited[n.node]){
+          visited[n.node] = true;
+          q.enqueue(n.node);
         }
       })
     }
@@ -123,4 +118,4 @@ class Graph {
   }
 }
 
-module.exports = Graph;
+module.exports = GraphWeightUndirect;

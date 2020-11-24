@@ -1,6 +1,6 @@
-const Graph = require("./Graph");
+const GraphUnweightUndirect = require("./GraphUnweightUndirect");
 
-let g = new Graph();
+let g = new GraphUnweightUndirect();
 g.addVertex('A');
 g.addVertex('B');
 g.addVertex('C');
