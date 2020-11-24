@@ -169,6 +169,50 @@ class GraphWeightUndirect {
     }
     return path.concat(smallest).reverse();
   }
+
+  //Time complexity,O(|V| |E|), slower than dijkstra, but works with negative edge weight
+  bellmanFord(startVertex,endVertex){
+    let distances = {};
+    let previousVertices = {};
+    distances[startVertex] = 0;
+    Object.keys(this.adjacencyList).forEach(vertex =>{
+      previousVertices[vertex] = null;
+      if(vertex !== startVertex){
+        distances[vertex] = Infinity;
+      }
+    });
+    // initial setup done
+    // we need (|v| - 1) iterations
+
+    const iterationNumber = Object.keys(this.adjacencyList).length - 1;
+
+    for(let iteration = 0;iteration < iterationNumber;iteration++){
+      Object.keys(distances).forEach(vertex =>{
+        this.adjacencyList[vertex].forEach(obj =>{
+          let neighbor = obj.node;
+          let weight = obj.weight;
+          let distanceToVertex = distances[vertex];
+          let distanceToNeighbor = distanceToVertex + weight;
+          if(distanceToNeighbor < distances[neighbor]){
+            distances[neighbor] = distanceToNeighbor;
+            previousVertices[neighbor] = vertex;
+          }
+        })
+      })
+    }
+
+    let path = [endVertex];
+    while(endVertex !== null){
+      path.push(previousVertices[endVertex]);
+      endVertex = previousVertices[endVertex];
+    }
+    path.pop();
+    return {
+      distances,
+      previousVertices,
+      path:path.reverse()
+    }
+  }
 }
 
 module.exports = GraphWeightUndirect;

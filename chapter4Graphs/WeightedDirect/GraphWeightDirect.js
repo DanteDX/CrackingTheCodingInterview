@@ -22,14 +22,12 @@ class GraphWeightDirect {
     }
   }
   //adding edge,O(1)
-  addEdge(v1, v2,weight) {
+  addEdge(v1, v2, weight) {
     if (this.adjacencyList[v1] && this.adjacencyList[v2]) {
-      if (
-        this.adjacencyList[v1].includes({node:v2,weight})
-      ) {
+      if (this.adjacencyList[v1].includes({ node: v2, weight })) {
         return true;
       } else {
-        this.adjacencyList[v1].push({node:v2,weight});
+        this.adjacencyList[v1].push({ node: v2, weight });
         return true;
       }
     } else {
@@ -38,11 +36,13 @@ class GraphWeightDirect {
   }
   //removing edge,O(E)
   removeEdge(v1, v2) {
-    if(!this.adjacencyList[v1] || !this.adjacencyList[v2]){
-        return undefined;
-    }else{
-        this.adjacencyList[v2] = this.adjacencyList[v2].filter(v => v.node !== v1);
-        return true;
+    if (!this.adjacencyList[v1] || !this.adjacencyList[v2]) {
+      return undefined;
+    } else {
+      this.adjacencyList[v2] = this.adjacencyList[v2].filter(
+        (v) => v.node !== v1
+      );
+      return true;
     }
   }
   //removing vertex, O(V + E)
@@ -96,21 +96,21 @@ class GraphWeightDirect {
   }
 
   //BFS uses Queue when done, O(V + E)
-  breadthFirst(start){
+  breadthFirst(start) {
     let q = new Queue();
     q.enqueue(start);
     let result = [];
     let visited = {};
     visited[start] = true;
-    while(q.length){
-      let current =q.dequeue();
+    while (q.length) {
+      let current = q.dequeue();
       result.push(current);
-      this.adjacencyList[current].forEach(n =>{
-        if(!visited[n.node]){
+      this.adjacencyList[current].forEach((n) => {
+        if (!visited[n.node]) {
           visited[n.node] = true;
           q.enqueue(n.node);
         }
-      })
+      });
     }
     return result;
   }
@@ -118,54 +118,100 @@ class GraphWeightDirect {
   /* Time complexity of dijkstra's algorithm is O(V2),
   but with the use of min priority queue, it drops to O(V + Elog(V))
   */
- Dijkstra(start,finish){
-  let minGenerator = new PriorityQueueMin();
-  let smallest;
-  let shortestDistance = {};
-  let previous = {};
-  let path = [];
-  for(let vertex in this.adjacencyList){
-      if(vertex === start){
+  Dijkstra(start, finish) {
+    let minGenerator = new PriorityQueueMin();
+    let smallest;
+    let shortestDistance = {};
+    let previous = {};
+    let path = [];
+    for (let vertex in this.adjacencyList) {
+      if (vertex === start) {
         shortestDistance[vertex] = 0;
-        minGenerator.enqueue(vertex,0);
-      }else{
+        minGenerator.enqueue(vertex, 0);
+      } else {
         shortestDistance[vertex] = Infinity;
-        minGenerator.enqueue(vertex,Infinity);
+        minGenerator.enqueue(vertex, Infinity);
       }
       previous[vertex] = null;
-  }
-  // console.log("shortest distances are:",shortestDistance);
-  // console.log("the previous object is",previous);
-  // initial setup done
-
-  while(minGenerator.values.length){
-    smallest = minGenerator.dequeueMin().val;
-    if(smallest === finish){
-      //this is the end case
-      while(previous[smallest]){
-        path.push(smallest);
-        smallest = previous[smallest];
-      }
-      break;
     }
-    if(smallest || shortestDistance[smallest] !== Infinity){
-      for(let n in this.adjacencyList[smallest]){
-        // here n is a index, not the content of the array
-        // experiment yourself in the browser
-        let nextNode = this.adjacencyList[smallest][n];
-        let candidate = shortestDistance[smallest] + nextNode.weight;
-        let nextNeighbor = nextNode.node;
+    // console.log("shortest distances are:",shortestDistance);
+    // console.log("the previous object is",previous);
+    // initial setup done
 
-        if(candidate < shortestDistance[nextNeighbor]){
-          shortestDistance[nextNeighbor] = candidate;
-          previous[nextNeighbor] = smallest;
-          minGenerator.enqueue(nextNeighbor,candidate);
+    while (minGenerator.values.length) {
+      smallest = minGenerator.dequeueMin().val;
+      if (smallest === finish) {
+        //this is the end case
+        while (previous[smallest]) {
+          path.push(smallest);
+          smallest = previous[smallest];
+        }
+        break;
+      }
+      if (smallest || shortestDistance[smallest] !== Infinity) {
+        for (let n in this.adjacencyList[smallest]) {
+          // here n is a index, not the content of the array
+          // experiment yourself in the browser
+          let nextNode = this.adjacencyList[smallest][n];
+          let candidate = shortestDistance[smallest] + nextNode.weight;
+          let nextNeighbor = nextNode.node;
+
+          if (candidate < shortestDistance[nextNeighbor]) {
+            shortestDistance[nextNeighbor] = candidate;
+            previous[nextNeighbor] = smallest;
+            minGenerator.enqueue(nextNeighbor, candidate);
+          }
         }
       }
     }
+    return path.concat(smallest).reverse();
   }
-  return path.concat(smallest).reverse();
-}
+
+
+  //Time complexity,O(|V| |E|), slower than dijkstra, but works with negative edge weight
+  bellmanFord(startVertex,endVertex){
+    let distances = {};
+    let previousVertices = {};
+    distances[startVertex] = 0;
+    Object.keys(this.adjacencyList).forEach(vertex =>{
+      previousVertices[vertex] = null;
+      if(vertex !== startVertex){
+        distances[vertex] = Infinity;
+      }
+    });
+    // initial setup done
+    // we need (|v| - 1) iterations
+
+    const iterationNumber = Object.keys(this.adjacencyList).length - 1;
+
+    for(let iteration = 0;iteration < iterationNumber;iteration++){
+      Object.keys(distances).forEach(vertex =>{
+        this.adjacencyList[vertex].forEach(obj =>{
+          let neighbor = obj.node;
+          let weight = obj.weight;
+          let distanceToVertex = distances[vertex];
+          let distanceToNeighbor = distanceToVertex + weight;
+          if(distanceToNeighbor < distances[neighbor]){
+            distances[neighbor] = distanceToNeighbor;
+            previousVertices[neighbor] = vertex;
+          }
+        })
+      })
+    }
+
+    let path = [endVertex];
+    while(endVertex !== null){
+      path.push(previousVertices[endVertex]);
+      endVertex = previousVertices[endVertex];
+    }
+    path.pop();
+    return {
+      distances,
+      previousVertices,
+      path:path.reverse()
+    }
+  }
+
 }
 
 module.exports = GraphWeightDirect;
