@@ -15,13 +15,15 @@ g.addEdge('A','B',12);
 g.addEdge('A','C',13);
 
 g.addEdge('B','G',14);
-g.addEdge('B','D',17);
+g.addEdge('B','D',1);//17
+// try switching back the values to see different path results
 
 g.addEdge('C','D',18);
 g.addEdge('C','E',20);
 
 g.addEdge('D','G',23);
-g.addEdge('D','E',19);
+g.addEdge('D','E',1); //19
+// try switching back the values to see different path results
 
 g.addEdge('E','F',22);
 
@@ -36,3 +38,5 @@ console.log("############################################");
 console.log("DFS Recursive result is: ",g.depthFirstRecursive('A'));
 console.log('#############################################');
 console.log("BFS result is:", g.breadthFirst('A'));
+console.log("###############################################");
+console.log(g.Dijkstra('B','C'));

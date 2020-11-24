@@ -6,6 +6,7 @@ if adjacency matrix was used, complexities were different */
 
 // This is a directed weighted graph
 const Queue = require("../../chapter3StackQueue/Queue/Queue");
+const PriorityQueueMin = require("../../chapter4Trees/PriorityQueue/PriorityQueueMin");
 
 class GraphWeightDirect {
   constructor() {
@@ -113,6 +114,58 @@ class GraphWeightDirect {
     }
     return result;
   }
+
+  /* Time complexity of dijkstra's algorithm is O(V2),
+  but with the use of min priority queue, it drops to O(V + Elog(V))
+  */
+ Dijkstra(start,finish){
+  let minGenerator = new PriorityQueueMin();
+  let smallest;
+  let shortestDistance = {};
+  let previous = {};
+  let path = [];
+  for(let vertex in this.adjacencyList){
+      if(vertex === start){
+        shortestDistance[vertex] = 0;
+        minGenerator.enqueue(vertex,0);
+      }else{
+        shortestDistance[vertex] = Infinity;
+        minGenerator.enqueue(vertex,Infinity);
+      }
+      previous[vertex] = null;
+  }
+  // console.log("shortest distances are:",shortestDistance);
+  // console.log("the previous object is",previous);
+  // initial setup done
+
+  while(minGenerator.values.length){
+    smallest = minGenerator.dequeueMin().val;
+    if(smallest === finish){
+      //this is the end case
+      while(previous[smallest]){
+        path.push(smallest);
+        smallest = previous[smallest];
+      }
+      break;
+    }
+    if(smallest || shortestDistance[smallest] !== Infinity){
+      for(let n in this.adjacencyList[smallest]){
+        // here n is a index, not the content of the array
+        // experiment yourself in the browser
+        let nextNode = this.adjacencyList[smallest][n];
+        let candidate = shortestDistance[smallest] + nextNode.weight;
+        let nextNeighbor = nextNode.node;
+
+        if(candidate < shortestDistance[nextNeighbor]){
+          shortestDistance[nextNeighbor] = candidate;
+          previous[nextNeighbor] = smallest;
+          minGenerator.enqueue(nextNeighbor,candidate);
+        }
+      }
+    }
+  }
+  return path.concat(smallest).reverse();
+}
 }
 
 module.exports = GraphWeightDirect;

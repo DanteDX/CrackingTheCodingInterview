@@ -32,3 +32,5 @@ console.log("############################################");
 console.log("DFS Recursive result is: ",g.depthFirstRecursive('A'));
 console.log('#############################################');
 console.log("BFS result is:", g.breadthFirst('A'));
+console.log("###############################################");
+console.log(g.Dijkstra('B','C'));
