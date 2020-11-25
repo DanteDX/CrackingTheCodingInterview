@@ -7,6 +7,7 @@ if adjacency matrix was used, complexities were different */
 // This is a undirected weighted graph
 const Queue = require("../../chapter3StackQueue/Queue/Queue");
 const PriorityQueueMin = require("../../chapter4Trees/PriorityQueue/PriorityQueueMin");
+const DisjointSet = require("../../DisjointSet");
 
 class GraphWeightUndirect {
   constructor() {
@@ -263,6 +264,46 @@ class GraphWeightUndirect {
     });
     console.log('After the algorithm ran, result is: ');
     return {distances,nextVertices};
+  }
+
+  //finding the minimum spanning tree using kruskal's algorithm
+  // we have to use Disjoint set to use this algorithm
+  // Time Complexity O(E log(E))
+  // Space COmplexity O(E + V)
+  Kruskal(){
+    let djs = new DisjointSet(...Object.keys(this.adjacencyList));
+    let MST = new GraphWeightUndirect();
+    let minGenerator = new PriorityQueueMin();
+    //crate all edges as an array
+    let allEdges = Object.keys(this.adjacencyList).map(eachVertex =>{
+      return this.adjacencyList[eachVertex].map(eachVertexEdge =>{
+          return {edge: eachVertex + eachVertexEdge.node, weight:eachVertexEdge.weight}
+      })
+    });
+    // this allEdges computation might not be included in the original time of 
+    // the algorithm
+    allEdges = allEdges.reduce((x,y) => [...x,...y]);
+    console.log('All Edges of the graph are:');
+    console.log(allEdges);
+    allEdges.forEach(eachEdge => minGenerator.enqueue(eachEdge.edge,eachEdge.weight));
+    // each time priorityQueueMin is dequed it will give smaller to larger weighted edge
+    console.log('edges coming out of the PriorityQueueMin');
+    while (!minGenerator.length) {
+      let nextEdge = minGenerator.dequeueMin();
+      if(nextEdge === undefined) break;
+      console.log(nextEdge);
+      let nodes = nextEdge.val;
+      let weight = nextEdge.priority;
+
+      if (!djs.connected(nodes[0], nodes[1])) {
+         MST.addVertex(nodes[0]);
+         MST.addVertex(nodes[1]);
+         MST.addEdge(nodes[0], nodes[1], weight);
+         djs.union(nodes[0], nodes[1]);
+      }
+   }
+   console.log('Following is the minimum spanning tree from kruskal');
+   return MST.adjacencyList;
   }
 }
 

@@ -39,3 +39,7 @@ console.log('Bellman ford result, B & C');
 console.log(g.bellmanFord('B','C'));
 console.log('Floyd Warshall result');
 console.log(g.floydWarshall());
+console.log('##############################################');
+console.log('Kruskal algorithm result:');
+console.log('Kruskal is implemented on this very graph');
+console.log(g.Kruskal());
