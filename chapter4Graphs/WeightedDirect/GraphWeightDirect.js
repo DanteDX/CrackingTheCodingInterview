@@ -213,7 +213,7 @@ class GraphWeightDirect {
 
   //time complexity, O(n3)
   // FloydWarshall is used to find all shortest distances between all pairs
-  floydWarshall(startVertex,endVertex) {
+  floydWarshall() {
     const vertices = Object.keys(this.adjacencyList);
     let nextVertices = new Array(vertices.length).fill(null).map(() => {
       return new Array(vertices.length).fill(null);

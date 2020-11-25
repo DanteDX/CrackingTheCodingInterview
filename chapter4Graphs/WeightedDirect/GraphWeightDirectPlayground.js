@@ -66,4 +66,4 @@ gf.addEdge('4','2',1);
 
 
 console.log('Floyd Warshall result');
-console.log(gf.floydWarshall('1','4'));
+console.log(gf.floydWarshall());
