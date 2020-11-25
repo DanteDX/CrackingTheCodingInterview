@@ -167,15 +167,14 @@ class GraphWeightDirect {
     return path.concat(smallest).reverse();
   }
 
-
   //Time complexity,O(|V| |E|), slower than dijkstra, but works with negative edge weight
-  bellmanFord(startVertex,endVertex){
+  bellmanFord(startVertex, endVertex) {
     let distances = {};
     let previousVertices = {};
     distances[startVertex] = 0;
-    Object.keys(this.adjacencyList).forEach(vertex =>{
+    Object.keys(this.adjacencyList).forEach((vertex) => {
       previousVertices[vertex] = null;
-      if(vertex !== startVertex){
+      if (vertex !== startVertex) {
         distances[vertex] = Infinity;
       }
     });
@@ -184,23 +183,23 @@ class GraphWeightDirect {
 
     const iterationNumber = Object.keys(this.adjacencyList).length - 1;
 
-    for(let iteration = 0;iteration < iterationNumber;iteration++){
-      Object.keys(distances).forEach(vertex =>{
-        this.adjacencyList[vertex].forEach(obj =>{
+    for (let iteration = 0; iteration < iterationNumber; iteration++) {
+      Object.keys(distances).forEach((vertex) => {
+        this.adjacencyList[vertex].forEach((obj) => {
           let neighbor = obj.node;
           let weight = obj.weight;
           let distanceToVertex = distances[vertex];
           let distanceToNeighbor = distanceToVertex + weight;
-          if(distanceToNeighbor < distances[neighbor]){
+          if (distanceToNeighbor < distances[neighbor]) {
             distances[neighbor] = distanceToNeighbor;
             previousVertices[neighbor] = vertex;
           }
-        })
-      })
+        });
+      });
     }
 
     let path = [endVertex];
-    while(endVertex !== null){
+    while (endVertex !== null) {
       path.push(previousVertices[endVertex]);
       endVertex = previousVertices[endVertex];
     }
@@ -208,10 +207,61 @@ class GraphWeightDirect {
     return {
       distances,
       previousVertices,
-      path:path.reverse()
-    }
+      path: path.reverse(),
+    };
   }
 
+  //time complexity, O(n3)
+  // FloydWarshall is used to find all shortest distances between all pairs
+  floydWarshall(startVertex,endVertex) {
+    const vertices = Object.keys(this.adjacencyList);
+    let nextVertices = new Array(vertices.length).fill(null).map(() => {
+      return new Array(vertices.length).fill(null);
+    });
+    let distances = new Array(vertices.length).fill(null).map(() => {
+      return new Array(vertices.length).fill(Infinity);
+    });
+
+    vertices.forEach((startVertex, startIndex) => {
+      vertices.forEach((endVertex, endIndex) => {
+        if (startVertex === endVertex) {
+          distances[startIndex][endIndex] = 0;
+        } else {
+          /* we have to find out whethere there exists en edge or not */
+          let exist = this.adjacencyList[startVertex].filter(
+            (obj) => obj.node === endVertex
+          );
+          if (exist.length === 1) {
+            // edge exists
+            distances[startIndex][endIndex] = exist[0].weight;
+            nextVertices[startIndex][endIndex] = startVertex;
+          } else {
+            distances[startIndex][endIndex] = Infinity;
+          }
+        }
+      });
+    });
+    console.log("All Vertices all:");
+    console.log(vertices);
+    console.log("Initially Next vertices matrix is:");
+    console.log(nextVertices);
+    console.log("Initially Distances matrix is: ");
+    console.log(distances);
+
+    vertices.forEach((middleVertex,middleIndex) =>{
+      vertices.forEach((startVertex,startIndex) =>{
+        vertices.forEach((endVertex,endIndex) =>{
+          let distViaMiddle = distances[startIndex][middleIndex] + distances[middleIndex][endIndex];
+          if(distViaMiddle < distances[startIndex][endIndex]){
+            distances[startIndex][endIndex] = distViaMiddle;
+            nextVertices[startIndex][endIndex] = middleVertex;
+          }
+        })
+      })
+    });
+    console.log('After the algorithm ran, result is: ');
+    return {distances,nextVertices};
+  }
 }
 
 module.exports = GraphWeightDirect;

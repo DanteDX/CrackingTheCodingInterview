@@ -44,3 +44,26 @@ console.log(g.Dijkstra('B','C'));
 console.log('################################################');
 console.log('Bellman ford result, B & C');
 console.log(g.bellmanFord('B','C'));
+console.log("#################################################");
+// specially for floy warshall testing
+let gf = new GraphWeightDirect();
+gf.addVertex('1');
+gf.addVertex('2');
+gf.addVertex('3');
+gf.addVertex('4');
+
+gf.addEdge('1','2',3);
+gf.addEdge('1','4',7);
+
+gf.addEdge('2','1',8);
+gf.addEdge('2','3',2);
+
+gf.addEdge('3','1',5);
+gf.addEdge('3','4',1);
+
+gf.addEdge('4','1',2);
+gf.addEdge('4','2',1);
+
+
+console.log('Floyd Warshall result');
+console.log(gf.floydWarshall('1','4'));

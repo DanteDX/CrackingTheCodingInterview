@@ -213,6 +213,57 @@ class GraphWeightUndirect {
       path:path.reverse()
     }
   }
+  //time complexity, O(n3)
+  // FloydWarshall is used to find all shortest distances between all pairs
+  floydWarshall(startVertex,endVertex) {
+    const vertices = Object.keys(this.adjacencyList);
+    let nextVertices = new Array(vertices.length).fill(null).map(() => {
+      return new Array(vertices.length).fill(null);
+    });
+    let distances = new Array(vertices.length).fill(null).map(() => {
+      return new Array(vertices.length).fill(Infinity);
+    });
+
+    vertices.forEach((startVertex, startIndex) => {
+      vertices.forEach((endVertex, endIndex) => {
+        if (startVertex === endVertex) {
+          distances[startIndex][endIndex] = 0;
+        } else {
+          /* we have to find out whethere there exists en edge or not */
+          let exist = this.adjacencyList[startVertex].filter(
+            (obj) => obj.node === endVertex
+          );
+          if (exist.length === 1) {
+            // edge exists
+            distances[startIndex][endIndex] = exist[0].weight;
+            nextVertices[startIndex][endIndex] = startVertex;
+          } else {
+            distances[startIndex][endIndex] = Infinity;
+          }
+        }
+      });
+    });
+    console.log("All Vertices all:");
+    console.log(vertices);
+    console.log("Initially Next vertices matrix is:");
+    console.log(nextVertices);
+    console.log("Initially Distances matrix is: ");
+    console.log(distances);
+
+    vertices.forEach((middleVertex,middleIndex) =>{
+      vertices.forEach((startVertex,startIndex) =>{
+        vertices.forEach((endVertex,endIndex) =>{
+          let distViaMiddle = distances[startIndex][middleIndex] + distances[middleIndex][endIndex];
+          if(distViaMiddle < distances[startIndex][endIndex]){
+            distances[startIndex][endIndex] = distViaMiddle;
+            nextVertices[startIndex][endIndex] = middleVertex;
+          }
+        })
+      })
+    });
+    console.log('After the algorithm ran, result is: ');
+    return {distances,nextVertices};
+  }
 }
 
 module.exports = GraphWeightUndirect;

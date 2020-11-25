@@ -37,3 +37,5 @@ console.log(g.Dijkstra('B','C'));
 console.log('################################################');
 console.log('Bellman ford result, B & C');
 console.log(g.bellmanFord('B','C'));
+console.log('Floyd Warshall result');
+console.log(g.floydWarshall());
