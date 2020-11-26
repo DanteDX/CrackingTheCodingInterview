@@ -25,6 +25,7 @@ class PriorityQueueMin{
     }
     enqueue(val,priority){
         if(priority === undefined || val === undefined) return false;
+        this.values = this.values.filter(obj => obj.val !== val);
         this.values.push({val,priority});
         this.bubbleUp();
         return true;

@@ -22,6 +22,7 @@ pqmin.enqueue("eleven",11);
 pqmin.enqueue("two",2);
 pqmin.enqueue('three',3);
 pqmin.enqueue('hundred',90);
+pqmin.enqueue('hundred',100);
 console.log('pqmin values are: ',pqmin.values);
 console.log(pqmin.dequeueMin());
 console.log(pqmin.dequeueMin());
