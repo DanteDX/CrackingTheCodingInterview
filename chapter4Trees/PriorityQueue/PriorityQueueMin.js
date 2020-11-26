@@ -30,6 +30,14 @@ class PriorityQueueMin{
         this.bubbleUp();
         return true;
     }
+    checkPriority(val){
+        for(let obj of this.values){
+            if(obj.val === val){
+                return obj.priority;
+            }
+        }
+        return undefined;
+    }
 
     /* we first extract the max from minheap
     and then fill the empty node with last added element,
@@ -72,13 +80,13 @@ class PriorityQueueMin{
     }
 
     dequeueMin(){
-        let max = this.values[0];
+        let min = this.values[0];
         let end = this.values.pop();
         if(this.values.length > 0){
             this.values[0] = end;
             this.sinkDown();
         }
-        return max;
+        return min;
     }
 }
 

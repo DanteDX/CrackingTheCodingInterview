@@ -305,6 +305,51 @@ class GraphWeightUndirect {
    console.log('Following is the minimum spanning tree from kruskal');
    return MST.adjacencyList;
   }
+
+  //finding minimum spanning tree using Prim's algorithm
+  //Time complexity O(E log(V))
+  // space complexity O(E + V)
+  Prim(){
+    // first push all vertices in the PriorityQueueMin
+    let minGenerator = new PriorityQueueMin();
+    let firstVertex = Object.keys(this.adjacencyList)[0];
+    for(let vertex in this.adjacencyList){
+      if(vertex === firstVertex){
+        minGenerator.enqueue(vertex,0);
+        continue;
+      }
+      minGenerator.enqueue(vertex,Infinity);
+    }
+    // console.log('Inside the priorityQueueMin initially');
+    // console.log(minGenerator.values);
+    
+    //the result will be here
+    let result = [];
+
+    // VE map
+    let VEMap = {};
+    Object.keys(this.adjacencyList).forEach(eachNode => VEMap[eachNode] = null);
+    // console.log('Initially the VEMap is:');
+    // console.log(VEMap);
+
+    while(minGenerator.values.length !== 0){
+      let currentVertex = minGenerator.dequeueMin();
+      if(currentVertex.val !== firstVertex){
+        result.push(VEMap[currentVertex.val]);
+      }
+      this.adjacencyList[currentVertex.val].forEach(obj =>{
+        if(obj.weight < minGenerator.checkPriority(obj.node)){
+          // console.log('this is going in the minpriorityqueue update');
+          // console.log({val:obj.node,priority:obj.weight});
+          minGenerator.enqueue(obj.node,obj.weight);
+          // console.log(minGenerator.values);
+          VEMap[obj.node] = currentVertex.val + obj.node;
+        } 
+      })
+    }
+    // console.log(VEMap);
+    return result;
+  }
 }
 
 module.exports = GraphWeightUndirect;
