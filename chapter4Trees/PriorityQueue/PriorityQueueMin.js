@@ -39,7 +39,7 @@ class PriorityQueueMin{
         return undefined;
     }
 
-    /* we first extract the max from minheap
+    /* we first extract the min from minheap
     and then fill the empty node with last added element,
     which will be already down in extract min
     function */

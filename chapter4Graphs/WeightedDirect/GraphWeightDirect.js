@@ -5,6 +5,7 @@ if adjacency matrix was used, complexities were different */
 //https://stackoverflow.com/questions/3332947/when-is-it-practical-to-use-depth-first-search-dfs-vs-breadth-first-search-bf#:~:text=BFS%20can%20be%20used%20to,nodes%20in%20an%20acyclic%20graph.
 
 // This is a directed weighted graph
+// Though MST is for Undirected graph, I gave it a whirl here
 const Queue = require("../../chapter3StackQueue/Queue/Queue");
 const PriorityQueueMin = require("../../chapter4Trees/PriorityQueue/PriorityQueueMin");
 const DisjointSet = require("../../DisjointSet");
@@ -345,6 +346,35 @@ class GraphWeightDirect {
     }
     // console.log(VEMap);
     return result;
+  }
+
+  //time complexity, O(V + E)
+  // auxiliary space complexity, O(V)
+  TopologicalSort(){
+    let adjacencyList = this.adjacencyList;
+    function TopologicalSortHelper(vertex,explored,stack){
+      explored.add(vertex);
+      adjacencyList[vertex].forEach(vertexObjInside =>{
+        let nodeInside = vertexObjInside.node;
+        if(!explored.has(nodeInside)){
+          TopologicalSortHelper(nodeInside,explored,stack);
+        }
+      })
+      stack.push(vertex);
+    }
+    let stack = [];
+    let explored = new Set();
+    Object.keys(adjacencyList).forEach(vertex =>{
+      if(!explored.has(vertex)){
+        TopologicalSortHelper(vertex,explored,stack);
+      }
+    })
+    let result = [];
+    while(stack.length !== 0){
+      result.push(stack.pop());
+    }
+    return result;
+
   }
 }
 
