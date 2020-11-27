@@ -381,6 +381,14 @@ class GraphWeightUndirect {
     }
     return false;
   }
+
+  //Tarzan's Algorithm
+  ArticularPoints(){
+    let adjacencyList = Object.keys(this.adjacencyList);
+    for(let node of adjacencyList){
+
+    }
+  }
 }
   
 
