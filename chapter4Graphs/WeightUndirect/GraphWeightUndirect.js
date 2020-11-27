@@ -427,8 +427,54 @@ class GraphWeightUndirect {
         this.APUtil(node,visited,ap,parent,low,disc);
       }
     }
+    this.time = 0;
     return ap;
   }
+
+  /* Finding Bridges in a graph
+    Time complexity is O(V+E) as DFS is used */
+    bridgeUtil(node,visited,parent,low,disc,result){
+      visited[node] = true;
+      disc[node] = this.time;
+      low[node] = this.time;
+      this.time++;
+
+      for(let nodeObj of this.adjacencyList[node]){
+        if(visited[nodeObj.node] === false){
+          parent[nodeObj.node] = node;
+          this.bridgeUtil(nodeObj.node,visited,parent,low,disc,result);
+
+          low[node] = (low[node] < low[nodeObj.node]) ? low[node] : low[nodeObj.node];
+
+          if(low[nodeObj.node] > disc[node]){
+            result.push(node + nodeObj.node);
+          }
+        }else if(nodeObj.node !== parent[node]){
+          low[node] = (low[node] < disc[nodeObj.node]) ? low[node] : disc[nodeObj.node];
+        }
+      }
+    }
+    bridge(){
+      let visited = {};
+      let disc = {};
+      let low = {};
+      let parent = {};
+      let result = [];
+
+      for(let vertex of Object.keys(this.adjacencyList)){
+        visited[vertex] = false;
+        disc[vertex] = Infinity;
+        low[vertex] = Infinity;
+        parent[vertex] = -1; 
+      }
+
+      for(let node of Object.keys(this.adjacencyList)){
+        if(visited[node] === false){
+          this.bridgeUtil(node, visited,parent,low,disc,result);
+        }
+      }
+      return result;
+    }
 }
   
 

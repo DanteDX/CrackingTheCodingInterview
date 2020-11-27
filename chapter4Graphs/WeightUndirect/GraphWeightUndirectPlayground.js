@@ -93,6 +93,7 @@ gat.addEdge('E','G',1);
 gat.addEdge('E','F',1);
 gat.addEdge('G','F',1);
 gat.addEdge('F','H',1);
+/************************** */
 // gat.addEdge('A','B',1);
 // gat.addEdge('B','C',1);
 // gat.addEdge('C','A',1);
@@ -101,3 +102,5 @@ gat.addEdge('F','H',1);
 console.log(gat.adjacencyList);
 console.log('Articular points are');
 console.log(gat.ArticularPoints());
+console.log('Bridges are:');
+console.log(gat.bridge());
