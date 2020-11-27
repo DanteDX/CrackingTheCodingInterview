@@ -278,7 +278,7 @@ class GraphWeightDirect {
       return this.adjacencyList[eachVertex].map(eachVertexEdge =>{
           return {edge: eachVertex + eachVertexEdge.node, weight:eachVertexEdge.weight}
       })
-    })
+    });
     allEdges = allEdges.reduce((x,y) => [...x,...y]);
     console.log('All Edges of the graph are:');
     console.log(allEdges);
@@ -374,8 +374,24 @@ class GraphWeightDirect {
       result.push(stack.pop());
     }
     return result;
-
   }
+
+  DetectCycle(){
+    let djs = new DisjointSet(...Object.keys(this.adjacencyList));
+    //crate all edges as an array
+    let allEdges = Object.keys(this.adjacencyList).map(eachVertex =>{
+      return this.adjacencyList[eachVertex].map(eachVertexEdge =>{
+          return {edge: eachVertex + eachVertexEdge.node, weight:eachVertexEdge.weight}
+      })
+    });
+    allEdges = allEdges.reduce((x,y) => [...x,...y]);
+    let mapping = {};
+    console.log('All edges are:');
+    console.log(allEdges);
+  }
+  
+
+
 }
 
 module.exports = GraphWeightDirect;

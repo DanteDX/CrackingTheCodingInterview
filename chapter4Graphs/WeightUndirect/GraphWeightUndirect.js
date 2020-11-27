@@ -350,6 +350,38 @@ class GraphWeightUndirect {
     // console.log(VEMap);
     return result;
   }
+
+  DetectCycle(){
+    let djs = new DisjointSet(...Object.keys(this.adjacencyList));
+    //crate all edges as an array
+    let allEdges = Object.keys(this.adjacencyList).map(eachVertex =>{
+      return this.adjacencyList[eachVertex].map(eachVertexEdge =>{
+          return eachVertex + eachVertexEdge.node;
+      })
+    });
+    allEdges = allEdges.reduce((x,y) => [...x,...y]);
+    console.log('All edges are:');
+    console.log(allEdges);
+    let filteredEdges = [];
+    for(let edge of allEdges){
+      let edgeTemp = edge.split("").reverse().join("");
+      if(filteredEdges.includes(edge) === false && filteredEdges.includes(edgeTemp) === false){
+        filteredEdges.push(edge);
+      }
+    }
+    console.log('Filtered edges are: ');
+    console.log(filteredEdges);
+    for(let vertexObj of filteredEdges){
+      let edge = vertexObj.split("");
+      if(djs.connected(edge[0],edge[1]) === false){
+        djs.union(edge[0],edge[1]);
+      }else if(djs.connected(edge[0],edge[1]) === true){
+        return true;
+      }
+    }
+    return false;
+  }
 }
+  
 
 module.exports = GraphWeightUndirect;
