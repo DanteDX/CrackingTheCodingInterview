@@ -12,6 +12,7 @@ const DisjointSet = require("../../DisjointSet");
 class GraphWeightUndirect {
   constructor() {
     this.adjacencyList = {};
+    this.time = 0;
   }
   //adding vertex, O(1)
   addVertex(vertex) {
@@ -382,12 +383,51 @@ class GraphWeightUndirect {
     return false;
   }
 
-  //Tarzan's Algorithm
-  ArticularPoints(){
-    let adjacencyList = Object.keys(this.adjacencyList);
-    for(let node of adjacencyList){
-
+  //Tarzan's Algorithm to find the articular points
+  //Time complexity, O(V+E) for adjacency list
+  APUtil(node,visited,ap,parent,low,disc){
+    let children = 0;
+    visited[node] = true;
+    disc[node] = this.time;
+    low[node] = this.time;
+    this.time++;
+    for(let nodeObj of this.adjacencyList[node]){
+      if(visited[nodeObj.node] === false){
+        parent[nodeObj.node] = node;
+        children++;
+        this.APUtil(nodeObj.node,visited,ap,parent,low,disc);
+        low[node] = low[node] < low[nodeObj.node] ? low[node] : low[nodeObj.node];
+        if(parent[node] === -1 && children > 1){
+          ap[node] = true;
+        }
+        if(parent[node] !== -1 && low[nodeObj.node] >= disc[node]){
+          ap[node] = true;
+        }
+      }else if(nodeObj.node !== parent[node]){
+        low[node] = low[node] < disc[nodeObj.node] ? low[node] : disc[nodeObj.node];
+      }
     }
+  }
+  ArticularPoints(){
+    let visited = {};
+    let disc = {};
+    let low = {};
+    let parent = {};
+    let ap = {};
+    Object.keys(this.adjacencyList).forEach(node =>{
+      visited[node] = false;
+      disc[node] = Infinity;
+      low[node]  = Infinity;
+      parent[node] = -1;
+      ap[node] = false;
+    });
+
+    for(let node of Object.keys(this.adjacencyList)){
+      if(visited[node] === false){
+        this.APUtil(node,visited,ap,parent,low,disc);
+      }
+    }
+    return ap;
   }
 }
   
