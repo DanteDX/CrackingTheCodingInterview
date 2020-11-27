@@ -377,17 +377,34 @@ class GraphWeightDirect {
   }
 
   DetectCycle(){
-    let djs = new DisjointSet(...Object.keys(this.adjacencyList));
-    //crate all edges as an array
-    let allEdges = Object.keys(this.adjacencyList).map(eachVertex =>{
-      return this.adjacencyList[eachVertex].map(eachVertexEdge =>{
-          return {edge: eachVertex + eachVertexEdge.node, weight:eachVertexEdge.weight}
-      })
-    });
-    allEdges = allEdges.reduce((x,y) => [...x,...y]);
-    let mapping = {};
-    console.log('All edges are:');
-    console.log(allEdges);
+    let graphNodes = Object.keys(this.adjacencyList);
+    let visited = {};
+    let recStack = {};
+    let adjacencyList = this.adjacencyList;
+
+    function DetectCycleUtil(vertex,visited,recStack){
+      if(!visited[vertex]){
+        visited[vertex] = true;
+        recStack[vertex] = true;
+
+        let nodeNeighbors = adjacencyList[vertex].map(each => each.node);
+        for(let currentNode of nodeNeighbors){
+          if(!visited[currentNode] && DetectCycleUtil(currentNode,visited,recStack)){
+            return true;
+          }else if(recStack[currentNode]){
+            return true;
+          }
+        }
+      }
+      recStack[vertex] = false;
+      return false;
+    }
+    for(let node of graphNodes){
+      if(DetectCycleUtil(node,visited,recStack)){
+        return true;
+      }
+    }
+    return false;
   }
   
 

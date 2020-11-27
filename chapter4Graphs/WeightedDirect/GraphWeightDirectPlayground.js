@@ -105,7 +105,9 @@ console.log(gt.TopologicalSort());
 console.log("##############################################################");
 console.log("##############################################################");
 console.log("##############################################################");
+//https://hackernoon.com/the-javascript-developers-guide-to-graphs-and-detecting-cycles-in-them-96f4f619d563
 console.log('This graph is for detecting cycles');
+/* returns true if there is a cycle, otherwise returns false */
 let gc = new GraphWeightDirect();
 gc.addVertex("A");
 gc.addVertex("B");
