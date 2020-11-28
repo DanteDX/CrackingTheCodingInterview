@@ -13,6 +13,7 @@ class GraphWeightUndirect {
   constructor() {
     this.adjacencyList = {};
     this.time = 0;
+    this.EdgeNumber = 0;
   }
   //adding vertex, O(1)
   addVertex(vertex) {
@@ -34,6 +35,7 @@ class GraphWeightUndirect {
       } else {
         this.adjacencyList[v1].push({node:v2,weight});
         this.adjacencyList[v2].push({node:v1,weight});
+        this.EdgeNumber++;
         return true;
       }
     } else {
@@ -473,8 +475,113 @@ class GraphWeightUndirect {
           this.bridgeUtil(node, visited,parent,low,disc,result);
         }
       }
+      this.time = 0;
       return result;
     }
+
+
+    /* Euler Path means to visit every edge only once, if that starting and ending vertex is the same
+    then it is an Euler Cycle or Circuit */
+    /* For a graph to have a euler cycle, every vertices must have even number of edges coming out of it,
+    if that is not true, in order for a euler path to exist within a graph, only two vertices at max can have
+    even number of edges coming out of it and rest should be even numbered, keeping in mind that
+    a undirected graph cannot have only one vertex having odd number of edges. If none of these situation
+    applies, the graph in question doesn't have a Euler path or cycle */
+    DetectEulerCycleMine(){
+      let isEulerCylcle = Object.keys(this.adjacencyList).every(node => this.adjacencyList[node].length % 2 === 0);
+      if(isEulerCylcle === true){
+        return {status:true,message:"Euler Cycle"};
+      }else{
+        let EdgeNumber = {};
+        Object.keys(this.adjacencyList).forEach(node => EdgeNumber[node] = this.adjacencyList[node].length);
+        let odd = 0;
+        let even = 0;
+        for(let node in EdgeNumber){
+          if(EdgeNumber[node] % 2 === 0){
+            even++;
+          }else{
+            odd++;
+          }
+        }
+        console.log("Number of vertices with Even edges are: ", even);
+        console.log("Number of vertices with odd edges are", odd);
+        if(odd > 2){
+          return {status:true,message:"No Euler Cycle or Euler Path Exist"}
+        }else{
+          return {status:false,message:"Euler path exist only"};
+        }
+      }
+    }
+
+    // Now we will be able to print the euler path/cycle if any
+    // by Fleury's algorithm
+    PrintEulerCycle(){
+      const adjacencyList = this.adjacencyList;
+      /*********************************** */
+      /****************************************** */
+      function DFSCount(v,visited){
+        let count = 1;
+        visited[v] = true;
+        for(let nodeObj of adjacencyList[v]){
+          if(visited[nodeObj.node] === false){
+            count = count + DFSCount(nodeObj.node,visited);
+          }
+        }
+        return count;
+      }
+      /********************************************* */
+      const isValidNextEdge = (u,v) =>{
+        if(adjacencyList[u].length === 1){
+          return true;
+        }else{
+          let visited = {};
+          let count1 = DFSCount(u,visited);
+
+          this.removeEdge(u,v);
+          visited = {};
+          let count2 = DFSCount(u,visited);
+
+          this.addEdge(u,v);
+
+          if(count1 > count2){
+            return false;
+          }else{
+            return true;
+          }
+        }
+      }
+      /*********************************************** */
+      const printEulerUtil = (node,result) =>{
+        for(let nodeObj of adjacencyList[node]){
+          if(isValidNextEdge(node,nodeObj.node)){
+            result.push(node + nodeObj.node);
+            this.removeEdge(node,nodeObj.node);
+            printEulerUtil(nodeObj.node,result);
+          }
+        }
+      }
+      /***************** */
+      let node = Object.keys(this.adjacencyList)[0];
+      let result = [];
+      for(let vertex in this.adjacencyList){
+        if(this.adjacencyList[vertex].length % 2 !== 0){
+          node = vertex;
+          break;
+        }
+      }
+      if(node === undefined){
+        return "Euler Cycle";
+      }
+      printEulerUtil(node,result);
+      let uniqueEdgeNumber = Math.floor((this.EdgeNumber)/2);
+
+      return result.slice(0,uniqueEdgeNumber);
+      
+    }
+
+
+
+
 }
   
 

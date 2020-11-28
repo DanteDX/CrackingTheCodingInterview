@@ -104,3 +104,29 @@ console.log('Articular points are');
 console.log(gat.ArticularPoints());
 console.log('Bridges are:');
 console.log(gat.bridge());
+console.log("######################################################");
+console.log("########################################################");
+console.log('Follwing graph is for testing Euler Path & Cycle');
+let gu = new GraphWeightUndirect();
+gu.addVertex('a');
+gu.addVertex('b');
+gu.addVertex('c');
+gu.addVertex('d');
+gu.addVertex('e');
+
+
+gu.addEdge('b','a',1);
+gu.addEdge('a','d',1);
+gu.addEdge('b','c',1);
+gu.addEdge('d','e',1);
+gu.addEdge('c','a',1);
+gu.addEdge('a','e',1);
+gu.addEdge("b","d",1);
+
+console.log(gu.adjacencyList);
+console.log('The Result for finding Eulerian Cycle & Path is: ');
+console.log(gu.DetectEulerCycleMine());
+console.log('The euler tour is:');
+console.log(gu.PrintEulerCycle());
+console.log("#############################################################");
+console.log("############################################################");
