@@ -569,14 +569,16 @@ class GraphWeightUndirect {
           break;
         }
       }
-      if(node === undefined){
-        return "Euler Cycle";
-      }
       printEulerUtil(node,result);
       let uniqueEdgeNumber = Math.floor((this.EdgeNumber)/2);
 
-      return result.slice(0,uniqueEdgeNumber);
+      return result.slice(0,uniqueEdgeNumber + 1);
       
+    }
+
+    DetectHamiltonCycle(){
+      // yet to be implemented
+      return null;
     }
 
 

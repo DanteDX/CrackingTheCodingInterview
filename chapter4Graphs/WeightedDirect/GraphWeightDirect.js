@@ -406,6 +406,64 @@ class GraphWeightDirect {
     }
     return false;
   }
+
+
+  /* Detecting Strongly Connected component using 
+  Tarzan's Algorithm */
+  DFSUtil(v,visited){
+    visited[v] = true;
+    console.log(v);
+    for(let nodeObj of this.adjacencyList[v]){
+      if(visited[nodeObj.node] === false){
+        this.DFSUtil(nodeObj.node,visited);
+      }
+    }
+  }
+  SCC(){
+    const fillOrder = (v,visited,stack) =>{
+      visited[v] = true;
+      for(let nodeObj of this.adjacencyList[v]){
+        if(visited[nodeObj.node] === false){
+          fillOrder(nodeObj.node,visited,stack);
+        }
+      }
+      stack.push(v);
+    }
+
+    const getTranspose = () =>{
+      let g = new GraphWeightDirect();
+      for(let i of Object.keys(this.adjacencyList)){
+        for(let j of this.adjacencyList[i]){
+          g.addVertex(i);
+          g.addVertex(j.node);
+          g.addEdge(j.node,i,1);
+        }
+      }
+      return g;
+    }
+    let stack = [];
+    let allNodes = Object.keys(this.adjacencyList);
+    let visited = {};
+    allNodes.forEach(eachNode => visited[eachNode] = false);
+
+    for(let eachNode of allNodes){
+      if(visited[eachNode] === false){
+        fillOrder(eachNode,visited,stack);
+      }
+    }
+    let gr = getTranspose();
+
+    visited = {};
+    allNodes.forEach(eachNode => visited[eachNode] = false);
+
+    while(stack.length !== 0){
+      let i = stack.pop();
+      if(visited[i] === false){
+        gr.DFSUtil(i,visited);
+        console.log("**");
+      }
+    }
+  }
   
 
 

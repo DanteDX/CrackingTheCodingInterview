@@ -114,14 +114,14 @@ gu.addVertex('c');
 gu.addVertex('d');
 gu.addVertex('e');
 
-
 gu.addEdge('b','a',1);
 gu.addEdge('a','d',1);
 gu.addEdge('b','c',1);
-gu.addEdge('d','e',1);
-gu.addEdge('c','a',1);
-gu.addEdge('a','e',1);
+// gu.addEdge('d','e',1);
+// gu.addEdge('c','a',1);
+// gu.addEdge('a','e',1);
 gu.addEdge("b","d",1);
+gu.addEdge("b","e",1);
 
 console.log(gu.adjacencyList);
 console.log('The Result for finding Eulerian Cycle & Path is: ');
